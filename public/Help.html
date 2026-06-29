@@ -13,6 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
 
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import {
@@ -408,7 +411,6 @@
       border-color: #a5b4fc;
     }
 
-    /* Remove number input spinners */
     input[type="number"] {
       -moz-appearance: textfield;
     }
@@ -453,7 +455,6 @@
       cursor: not-allowed;
     }
 
-    /* Status Message */
     #statusMessage {
       margin-top: 0.75rem;
       padding: 0.75rem;
@@ -477,7 +478,6 @@
       }
     }
 
-    /* Footer */
     .footer {
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(8px);
@@ -490,7 +490,6 @@
       margin-top: 0.5rem;
     }
 
-    /* Back Button */
     .back-button {
       position: fixed;
       bottom: 20px;
@@ -521,7 +520,6 @@
       transform: scale(0.92);
     }
 
-    /* Animations */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -538,14 +536,12 @@
       animation: fadeInUp 0.4s ease-out forwards;
     }
 
-    /* Required field indicator */
     .required::after {
       content: "*";
       color: #ef4444;
       margin-right: 2px;
     }
 
-    /* Custom select styling */
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -555,7 +551,6 @@
       padding-left: 36px !important;
     }
 
-    /* Copy feedback */
     .copy-feedback {
       position: fixed;
       bottom: 80px;
@@ -590,7 +585,6 @@
       }
     }
 
-    /* Loading spinner */
     .submit-btn.loading {
       position: relative;
       color: transparent;
@@ -617,7 +611,6 @@
       }
     }
 
-    /* Theme styles */
     .theme-dark body {
       background: linear-gradient(135deg, #0b1120, #1a1a2e, #16213e);
     }
@@ -746,7 +739,6 @@
       color: #e2e8f0;
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
       .form-grid {
         grid-template-columns: 1fr;
@@ -827,7 +819,6 @@
       }
     }
 
-    /* Touch-friendly adjustments */
     @media (hover: none) and (pointer: coarse) {
 
       .contact-item,
@@ -855,7 +846,7 @@
       <div class="title">الإدارة العامة للأنظمة العدادات الحديثة</div>
     </header>
 
-    <section class="contact-section animate" style="animation-delay: 0.1s">
+    <section id="contactInfo" class="contact-section animate" style="animation-delay: 0.1s">
       <h2>
         <i class="fas fa-address-card"></i>
         معلومات التواصل
@@ -881,7 +872,7 @@
       </div>
     </section>
 
-    <section class="contact-section animate" style="animation-delay: 0.2s">
+    <section id="ticketFormSection" class="contact-section animate" style="animation-delay: 0.2s">
       <h2>
         <i class="fas fa-ticket-alt"></i>
         إنشاء تذكرة دعم
@@ -950,16 +941,14 @@
     </footer>
   </div>
 
-  <a href="Main_App.html" class="back-button" aria-label="العودة للرئيسية">
+  <a href="index.html" class="back-button" aria-label="العودة للرئيسية">
     <i class="fas fa-arrow-left"></i>
   </a>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Set current year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // ===== THEME SUPPORT =====
       function setTheme(theme) {
         document.body.className = `theme-${theme}`;
         localStorage.setItem('selectedTheme', theme);
@@ -972,17 +961,15 @@
       const statusMessage = document.getElementById("statusMessage");
       const submitBtn = document.getElementById("submitBtn");
 
-      // Type mapping for Firebase folders
       const typeMapping = {
         "عطل تقني": "عطل تقني",
         "اضافة بيانات": "اضافة بيانات",
         "تعديل بيانات": "تعديل بيانات",
       };
 
-      // ===== PERMISSION CONTROL FOR SMART HELP =====
       async function loadSmartPermissions() {
         try {
-          const mainFirebaseConfig = {
+          const FIREBASE_CONFIG = {
             apiKey: "AIzaSyBm5-7ZN7frav9FvJFf9tgkE-mg8nex6t0",
             authDomain: "publish-ae85.firebaseapp.com",
             projectId: "publish-ae85",
@@ -996,13 +983,13 @@
           try {
             mainApp = firebase.app('mainApp');
           } catch (e) {
-            mainApp = firebase.initializeApp(mainFirebaseConfig, 'mainApp');
+            mainApp = firebase.initializeApp(FIREBASE_CONFIG, 'mainApp');
           }
           const mainDB = firebase.database(mainApp);
 
           const savedUser = localStorage.getItem('currentUser');
           if (!savedUser) {
-            console.log('SMART Help - No user logged in');
+            console.log('Help - No user logged in');
             return;
           }
 
@@ -1014,20 +1001,19 @@
           const userPerms = permissions[role] || { permissions: [] };
           const allowed = userPerms.permissions || [];
 
-          console.log(`🔐 SMART Help - User role: ${role}, Permissions: ${allowed.length}`);
+          console.log(`🔐 Help - User role: ${role}, Permissions: ${allowed.length}`);
 
-          // Elements to control
-          const elementMap = {
-            'contactInfo': 'contactInfo',
-            'ticketForm': 'ticketForm',
-          };
+          // الـ Visibility وعملية الإخفاء بناءً على صلاحيات الـ Control Panel
+          const contactSection = document.getElementById('contactInfo');
+          if (contactSection) {
+            contactSection.style.display = allowed.includes('contactInfo') ? '' : 'none';
+            console.log(`${allowed.includes('contactInfo') ? '🔓' : '🔒'} contactInfo`);
+          }
 
-          for (const [permId, elementId] of Object.entries(elementMap)) {
-            const el = document.getElementById(elementId) || document.querySelector(`[id*="${elementId}"]`);
-            if (!el) continue;
-            const isVisible = allowed.includes(permId);
-            el.style.display = isVisible ? '' : 'none';
-            console.log(`${isVisible ? '🔓' : '🔒'} ${permId} (${elementId})`);
+          const ticketSection = document.getElementById('ticketFormSection');
+          if (ticketSection) {
+            ticketSection.style.display = allowed.includes('ticketForm') ? '' : 'none';
+            console.log(`${allowed.includes('ticketForm') ? '🔓' : '🔒'} ticketForm`);
           }
 
         } catch (e) {
@@ -1036,7 +1022,6 @@
       }
       loadSmartPermissions();
 
-      // Copy-to-clipboard functionality
       const contactItems = document.querySelectorAll('.contact-item[data-copy]');
 
       const showCopyFeedback = (message) => {
@@ -1046,7 +1031,7 @@
         document.body.appendChild(feedback);
         setTimeout(() => {
           feedback.remove();
-        }, 1500);
+        }, 150);
       };
 
       contactItems.forEach(item => {
@@ -1069,7 +1054,6 @@
         });
       });
 
-      // Form submission
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -1112,7 +1096,7 @@
 
         submitBtn.disabled = true;
         submitBtn.classList.add("loading");
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> جاري الحفظ...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> jاري الحفظ...';
 
         try {
           const ticketsRef = window.fbRef(window.fbDB, `tickets/${dbFolder}`);
@@ -1124,7 +1108,7 @@
 
           setTimeout(() => {
             statusMessage.style.display = "none";
-          }, 4000);
+          }, 400);
         } catch (error) {
           console.error("Firebase Error:", error);
           showStatusMessage(
@@ -1149,10 +1133,9 @@
           if (statusMessage.style.display === "block") {
             statusMessage.style.display = "none";
           }
-        }, 4000);
+        }, 400);
       }
 
-      // Input validation for meter number
       const meterInput = document.querySelector('input[name="meter_id"]');
       if (meterInput) {
         meterInput.addEventListener('input', function (e) {
@@ -1160,7 +1143,6 @@
         });
       }
 
-      // Touch-friendly optimizations
       const allInputs = document.querySelectorAll('input, select, textarea');
       allInputs.forEach(input => {
         input.addEventListener('touchstart', function () {

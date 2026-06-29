@@ -981,19 +981,6 @@
     <div id="loadingStatus" class="mt-3 text-slate-400 text-xs">Connecting...</div>
   </div>
 
-  <div id="authOverlay"
-    class="fixed inset-0 z-[10000] flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
-    <div class="neo-card w-[420px] max-w-[95%] p-8 text-center">
-      <h2 class="text-3xl font-black gradient-text">Welcome back</h2>
-      <div id="loginFormDiv" class="mt-6 space-y-4">
-        <input id="loginUsername" type="text" placeholder="Username" class="input-modern">
-        <input id="loginPassword" type="password" placeholder="Password" class="input-modern">
-        <button id="doLoginBtn" class="btn-modern w-full py-3 text-base justify-center">Access</button>
-        <div id="loginMessage" class="text-rose-500 text-sm mt-2"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Main App -->
   <div id="mainApp" style="display:none;" class="main-card">
     <div class="glass-card neo-card rounded-[15px] p-4 flex flex-col min-h-[97vh] w-full">
@@ -3955,12 +3942,9 @@
       if (inactivityTimer) clearTimeout(inactivityTimer);
       currentUser = null;
       localStorage.removeItem('currentUser');
+      localStorage.setItem('isLoggedIn', 'false');
       sessionStorage.setItem('wasLoggedIn', 'false');
-      document.getElementById('authOverlay').classList.remove('hidden');
-      document.getElementById('mainApp').style.display = 'none';
-      showToast('Logged out successfully', 'success');
-      document.getElementById('loginPassword').value = '';
-      document.getElementById('loginMessage').innerText = '';
+      window.location.href = 'index.html?logout=true';
     }
 
     function handleSleep() {
@@ -3971,68 +3955,24 @@
       setTimeout(() => { isSleeping = false; }, 1000);
     }
 
-    // ===== AUTH =====
-    async function handleLogin() {
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const msg = document.getElementById('loginMessage');
-      if (!username || !password) { msg.innerText = 'Enter credentials'; return; }
-      document.getElementById('loadingScreen').classList.remove('hidden');
-      updateLoadingProgress(10, 'Authenticating...');
-      try {
-        const snap = await firebaseDB.ref('users-generatedcode').once('value');
-        const users = snap.val();
-        let found = null;
-        for (let k in users) {
-          if (users[k].username === username) {
-            found = users[k];
-            found.id = k;
-            break;
-          }
-        }
-        if (!found) {
-          msg.innerText = 'Invalid credentials';
-          hideLoadingScreen();
-          return;
-        }
-        let stored = "";
-        if (typeof found.password === "string") stored = found.password;
-        else if (typeof found.password === "object") stored = found.password.password || found
-          .password.value || JSON.stringify(found.password);
-        else stored = String(found.password);
-        if (String(stored) === String(password)) {
-          currentUser = found;
-          localStorage.setItem('currentUser', JSON.stringify(found));
-          sessionStorage.setItem('wasLoggedIn', 'true');
-          msg.innerText = '';
-          document.getElementById('loginPassword').value = '';
-          updateLoadingProgress(20, 'Loading...');
-          await showMainApp();
-        } else {
-          msg.innerText = 'Invalid password';
-          document.getElementById('loginPassword').value = '';
-          hideLoadingScreen();
-        }
-      } catch (e) {
-        msg.innerText = 'Server error';
-        console.error(e);
-        hideLoadingScreen();
-      }
-    }
-
     async function showMainApp() {
       try {
-        document.getElementById('authOverlay').classList.add('hidden');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const savedUser = localStorage.getItem('currentUser');
+
+        if (!isLoggedIn || !savedUser) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        currentUser = JSON.parse(savedUser);
         document.getElementById('mainApp').style.display = 'block';
-        const username = currentUser?.username || 'User';
-        const profileImage = currentUser?.profileImage || null;
         updateLoadingProgress(30, 'Loading data...');
         await loadFromFirebase();
         updateLoadingProgress(70, 'Pages...');
         loadSavedPages();
         updateLoadingProgress(85, 'UI...');
         renderCards();
-        // Load permissions after user is authenticated
         await loadUserPermissions();
         setupInactivityListeners();
         setTimeout(() => {
@@ -4041,8 +3981,7 @@
         }, 200);
       } catch (e) {
         console.error('Error in showMainApp:', e);
-        document.getElementById('authOverlay').classList.remove('hidden');
-        document.getElementById('mainApp').style.display = 'none';
+        window.location.href = 'index.html';
         hideLoadingScreen();
         showToast('Error loading app, please try again', 'error');
       }
@@ -4750,7 +4689,6 @@
         updateLoadingProgress(15, 'Firebase connection issue, using offline mode');
       }
 
-      document.getElementById('doLoginBtn').onclick = handleLogin;
       document.getElementById('dbActionsBtn').onclick = showDbActionsCard;
       document.getElementById('rowOpsBtn').onclick = showRowOpsCard;
 
@@ -4830,23 +4768,21 @@
       const savedTheme = localStorage.getItem('selectedTheme') || 'light';
       setTheme(savedTheme);
       updateLoadingProgress(35, 'Session...');
-      const saved = localStorage.getItem('currentUser');
-      if (saved) {
+      // Check for existing session from index.html
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const savedUser = localStorage.getItem('currentUser');
+
+      if (isLoggedIn && savedUser) {
         try {
-          currentUser = JSON.parse(saved);
+          currentUser = JSON.parse(savedUser);
           showMainApp();
         } catch (e) {
-          console.error('Error loading saved session:', e);
-          document.getElementById('authOverlay').classList.remove('hidden');
-          document.getElementById('mainApp').style.display = 'none';
+          window.location.href = 'index.html';
           hideLoadingScreen();
         }
       } else {
-        setTimeout(() => {
-          document.getElementById('authOverlay').classList.remove('hidden');
-          document.getElementById('mainApp').style.display = 'none';
-          hideLoadingScreen();
-        }, 500);
+        window.location.href = 'index.html';
+        hideLoadingScreen();
       }
     });
 

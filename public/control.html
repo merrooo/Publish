@@ -591,9 +591,14 @@
             color: #059669;
         }
 
-        .module-tag.smart_help {
+        .module-tag.help {
             background: rgba(245, 158, 11, 0.2);
             color: #d97706;
+        }
+
+        .module-tag.dashboard {
+            background: rgba(99, 102, 241, 0.2);
+            color: #4f46e5;
         }
 
         .top-actions {
@@ -756,7 +761,92 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* MAIN CONTAINER - NO SCROLL */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            color: #64748b;
+        }
+
+        .dashboard-apps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .dashboard-app-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1e293b;
+        }
+
+        .dashboard-app-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+        }
+
+        .dashboard-app-card .app-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .dashboard-app-card .app-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .dashboard-app-card .app-desc {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 0.15rem;
+        }
+
+        .dashboard-app-card .app-badge {
+            display: inline-block;
+            margin-top: 0.3rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.5rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
         .main-card {
             max-width: 100%;
             width: 100%;
@@ -804,7 +894,12 @@
             min-height: 200px;
         }
 
-        /* Theme styles */
+        #dashboardContent {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
         .theme-dark body {
             background: linear-gradient(135deg, #0b1120, #1a1a2e, #16213e);
         }
@@ -892,6 +987,22 @@
 
         .theme-dark .role-tag .remove-role {
             color: #f87171;
+        }
+
+        .theme-dark .user-name {
+            color: #e2e8f0;
+        }
+
+        .theme-dark .user-role {
+            color: #94a3b8;
+        }
+
+        .theme-dark .dashboard-app-card {
+            color: #e2e8f0;
+        }
+
+        .theme-dark .dashboard-app-card .app-desc {
+            color: #94a3b8;
         }
 
         .theme-ocean body {
@@ -1032,32 +1143,68 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        .theme-dark .user-name {
+            color: #e2e8f0;
+        }
+
+        .theme-dark .user-role {
+            color: #94a3b8;
+        }
+
+        .theme-dark .dashboard-app-card {
+            color: #e2e8f0;
+        }
+
+        .theme-dark .dashboard-app-card .app-desc {
+            color: #94a3b8;
+        }
+
+        .theme-ocean .user-name {
+            color: #f0f9ff;
+        }
+
+        .theme-ocean .user-role {
+            color: #7dd3fc;
+        }
+
+        .theme-ocean .dashboard-app-card {
+            color: #f0f9ff;
+        }
+
+        .theme-ocean .dashboard-app-card .app-desc {
+            color: #7dd3fc;
+        }
     </style>
 </head>
 
 <body class="theme-light">
     <div id="mainApp" class="main-card">
         <div class="glass-card rounded-[28px] p-4 flex flex-col min-h-[97vh] w-full">
-            <!-- HEADER -->
-            <div class="flex justify-between items-center mb-4 pb-4 border-b border-white/15 flex-wrap gap-2">
-                <div>
-                    <h1 class="text-2xl font-bold gradient-text"><i
-                            class="fas fa-shield-alt text-purple-400 mr-2"></i>Admin Control Panel</h1>
-                    <p class="text-gray-400 text-xs mt-1 font-medium">Control which buttons appear for each role across
-                        all modules</p>
+
+            <div class="flex justify-between items-center mb-3 pb-3 border-b border-white/15 flex-wrap gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="user-avatar" id="userAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="user-name" id="userNameDisplay">Admin</div>
+                        <div class="user-role" id="userRoleDisplay">Role: admin</div>
+                    </div>
                 </div>
                 <div class="top-actions">
                     <div class="bg-white/20 px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-sm">
                         <span id="connectionStatus" class="text-xs font-medium text-gray-600"><i
                                 class="fas fa-circle text-green-400 mr-1.5 animate-pulse"></i> Connected</span>
                     </div>
-                    <button onclick="window.location.href='Main_App.html'" class="btn-glass small text-xs"><i
-                            class="fas fa-arrow-left mr-1"></i> Back</button>
+                    <button onclick="window.location.href='index.html'" class="btn-glass small text-xs"><i
+                            class="fas fa-arrow-left mr-1"></i> Dashboard</button>
+                    <button onclick="handleLogout()" class="btn-danger small text-xs"><i
+                            class="fas fa-sign-out-alt mr-1"></i> Logout</button>
                 </div>
             </div>
 
-            <!-- STATS -->
-            <div class="grid grid-cols-4 gap-3 mb-4">
+            <div class="grid grid-cols-4 gap-3 mb-3">
                 <div class="stat-card p-3">
                     <div class="number text-2xl" id="totalUsers">0</div>
                     <div class="label text-[10px]">Total Users</div>
@@ -1076,17 +1223,15 @@
                 </div>
             </div>
 
-            <!-- TABS -->
             <div class="flex gap-2 mb-3 flex-wrap">
                 <button class="tab-btn active" data-tab="users"><i class="fas fa-users mr-1"></i> Users</button>
                 <button class="tab-btn" data-tab="permissions"><i class="fas fa-eye-slash mr-1"></i> Visibility</button>
                 <button class="tab-btn" data-tab="databases"><i class="fas fa-database mr-1"></i> Databases</button>
                 <button class="tab-btn" data-tab="cache"><i class="fas fa-broom mr-1"></i> Cache</button>
+                <button class="tab-btn" data-tab="dashboard"><i class="fas fa-th-large mr-1"></i> Dashboard</button>
             </div>
 
-            <!-- TAB CONTENT -->
             <div class="flex-1 overflow-hidden">
-                <!-- USERS TAB -->
                 <div id="tab-users" class="tab-content">
                     <div class="flex justify-between items-center mb-3 border-b border-white/15 pb-2">
                         <h2 class="section-title mb-0 text-sm"><i
@@ -1097,7 +1242,6 @@
                     <div id="usersList" class="space-y-2"></div>
                 </div>
 
-                <!-- PERMISSIONS TAB -->
                 <div id="tab-permissions" class="tab-content hidden">
                     <div class="flex justify-between items-center mb-3 border-b border-white/15 pb-2">
                         <h2 class="section-title mb-0 text-sm"><i
@@ -1122,8 +1266,9 @@
                                 data-module="processes">Processes</button>
                             <button class="module-btn btn-glass text-xs px-3 py-1.5"
                                 data-module="summary">Summary</button>
+                            <button class="module-btn btn-glass text-xs px-3 py-1.5" data-module="help">Help</button>
                             <button class="module-btn btn-glass text-xs px-3 py-1.5"
-                                data-module="smart_help">SMART_HELP</button>
+                                data-module="dashboard">Dashboard</button>
                         </div>
                     </div>
                     <div class="flex-1 p-3 bg-white/10 rounded-xl border border-white/15 overflow-hidden flex flex-col">
@@ -1148,7 +1293,6 @@
                     </div>
                 </div>
 
-                <!-- DATABASES TAB -->
                 <div id="tab-databases" class="tab-content hidden">
                     <div class="mb-3 border-b border-white/15 pb-2">
                         <h2 class="section-title mb-0 text-sm"><i class="fas fa-server text-purple-400 mr-2"></i>Storage
@@ -1157,7 +1301,6 @@
                     <div id="databasesList" class="space-y-2 flex-1 overflow-y-auto"></div>
                 </div>
 
-                <!-- CLEAR CACHE TAB -->
                 <div id="tab-cache" class="tab-content hidden">
                     <div class="mb-3 border-b border-white/15 pb-2">
                         <h2 class="section-title mb-0 text-sm"><i class="fas fa-broom text-yellow-400 mr-2"></i>Clear
@@ -1202,10 +1345,21 @@
                             class="bg-white/10 rounded-xl p-3 border border-white/15 hover:border-yellow-400/30 transition flex items-center justify-between">
                             <div>
                                 <h4 class="text-gray-800 font-bold text-sm"><i
-                                        class="fas fa-lightbulb text-yellow-400 mr-1"></i>SMART Help</h4>
-                                <p class="text-gray-400 text-[10px]">SMART_Help.html</p>
+                                        class="fas fa-life-ring text-yellow-400 mr-1"></i>Help</h4>
+                                <p class="text-gray-400 text-[10px]">Help.html</p>
                             </div>
-                            <button onclick="clearPageCache('SMART_Help.html')" class="clear-page-btn text-[10px]">
+                            <button onclick="clearPageCache('Help.html')" class="clear-page-btn text-[10px]">
+                                <i class="fas fa-broom"></i> Clear
+                            </button>
+                        </div>
+                        <div
+                            class="bg-white/10 rounded-xl p-3 border border-white/15 hover:border-yellow-400/30 transition flex items-center justify-between">
+                            <div>
+                                <h4 class="text-gray-800 font-bold text-sm"><i
+                                        class="fas fa-th-large text-purple-400 mr-1"></i>Dashboard</h4>
+                                <p class="text-gray-400 text-[10px]">index.html</p>
+                            </div>
+                            <button onclick="clearPageCache('index.html')" class="clear-page-btn text-[10px]">
                                 <i class="fas fa-broom"></i> Clear
                             </button>
                         </div>
@@ -1230,12 +1384,41 @@
                         </p>
                     </div>
                 </div>
+
+                <div id="tab-dashboard" class="tab-content hidden">
+                    <div class="mb-3 border-b border-white/15 pb-2">
+                        <h2 class="section-title mb-0 text-sm"><i class="fas fa-th-large text-purple-400 mr-2"></i>
+                            Applications</h2>
+                        <p class="text-gray-500 text-xs mt-0.5">Quick access to all modules</p>
+                    </div>
+                    <div id="dashboardContent" class="flex-1 overflow-y-auto">
+                        <div class="dashboard-apps" id="appsContainer"></div>
+                        <div class="mt-4 p-4 bg-white/10 rounded-xl border border-white/15">
+                            <h3 class="text-gray-700 font-bold text-xs uppercase tracking-wider mb-3">Quick Links</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="index.html" class="btn-glass text-xs">
+                                    <i class="fas fa-home mr-1"></i> Dashboard
+                                </a>
+                                <a href="Help.html" class="btn-glass text-xs">
+                                    <i class="fas fa-question-circle mr-1"></i> Help
+                                </a>
+                                <a href="Main_App.html" class="btn-glass text-xs">
+                                    <i class="fas fa-database mr-1"></i> Main App
+                                </a>
+                                <a href="Processes.html" class="btn-glass text-xs">
+                                    <i class="fas fa-cogs mr-1"></i> Processes
+                                </a>
+                                <a href="Summary.html" class="btn-glass text-xs">
+                                    <i class="fas fa-chart-bar mr-1"></i> Summary
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODALS (same as before) -->
-    <!-- ADD USER MODAL -->
     <div id="addUserModal" class="modal-overlay hidden">
         <div class="modal-content relative">
             <button
@@ -1280,7 +1463,6 @@
         </div>
     </div>
 
-    <!-- EDIT USER MODAL -->
     <div id="editUserModal" class="modal-overlay hidden">
         <div class="modal-content relative">
             <button
@@ -1327,7 +1509,6 @@
         </div>
     </div>
 
-    <!-- ADD ROLE MODAL -->
     <div id="addRoleModal" class="modal-overlay hidden">
         <div class="modal-content relative">
             <button
@@ -1354,6 +1535,7 @@
         const FIREBASE_CONFIG = {
             apiKey: "AIzaSyBm5-7ZN7frav9FvJFf9tgkE-mg8nex6t0",
             authDomain: "publish-ae85.firebaseapp.com",
+            databaseURL: "https://publish-ae85-default-rtdb.firebaseio.com",
             projectId: "publish-ae85",
             storageBucket: "publish-ae85.firebasestorage.app",
             messagingSenderId: "515415500647",
@@ -1367,10 +1549,58 @@
         let savedDatabases = {};
         let selectedRole = 'admin';
         let selectedModule = 'main_app';
+        let currentUser = null;
 
-        // ============================================================
-        // ALL BUTTONS - Complete list for all modules
-        // ============================================================
+        const APPS = [{
+            id: 'main_app',
+            name: 'Main App',
+            icon: 'fa-home',
+            desc: 'Database management & operations',
+            color: 'text-blue-500',
+            path: 'Main_App.html',
+            badge: 'Core'
+        }, {
+            id: 'processes',
+            name: 'Processes',
+            icon: 'fa-cogs',
+            desc: 'Excel tools & data processing',
+            color: 'text-red-500',
+            path: 'Processes.html',
+            badge: 'Tools'
+        }, {
+            id: 'summary',
+            name: 'Summary',
+            icon: 'fa-chart-bar',
+            desc: 'Data analysis & pivot tables',
+            color: 'text-green-500',
+            path: 'Summary.html',
+            badge: 'Analytics'
+        }, {
+            id: 'help',
+            name: 'Help',
+            icon: 'fa-life-ring',
+            desc: 'Support & ticket system',
+            color: 'text-yellow-500',
+            path: 'Help.html',
+            badge: 'Support'
+        }, {
+            id: 'dashboard',
+            name: 'Dashboard',
+            icon: 'fa-th-large',
+            desc: 'Main dashboard & navigation',
+            color: 'text-purple-500',
+            path: 'index.html',
+            badge: 'Home'
+        }, {
+            id: 'control',
+            name: 'Control Panel',
+            icon: 'fa-shield-alt',
+            desc: 'User & permission management',
+            color: 'text-red-500',
+            path: 'control.html',
+            badge: 'Admin'
+        }];
+
         const ALL_BUTTONS = {
             main_app: [
                 { id: 'dbActionsBtn', label: '📁 Database Actions', group: 'top_bar' },
@@ -1431,17 +1661,17 @@
                 { id: 'settingsLogoutBtn', label: '🚪 Logout', group: 'settings_sub' },
                 { id: 'theme-option-small', label: '🎨 Theme: Light ☀️ / Dark 🌙 / Ocean 🌊', group: 'settings_sub' },
             ],
-            smart_help: [
-                { id: 'smartHelpBtn', label: '🧠 Smart Help', group: 'top_bar' },
+            help: [
                 { id: 'contactInfo', label: '📞 Contact Info', group: 'top_bar' },
                 { id: 'ticketForm', label: '🎫 Ticket Form', group: 'top_bar' },
-                { id: 'settingsExportJsonBtn', label: '📄 Export JSON', group: 'settings_sub' },
-                { id: 'settingsExportExcelBtn', label: '📊 Export Excel', group: 'settings_sub' },
-                { id: 'settingsImportExcel', label: '📂 Import Excel', group: 'settings_sub' },
-                { id: 'settingsAddPageBtn', label: '🌐 Add Page', group: 'settings_sub' },
-                { id: 'settingsSleepBtn', label: '💤 Sleep', group: 'settings_sub' },
-                { id: 'settingsLogoutBtn', label: '🚪 Logout', group: 'settings_sub' },
-                { id: 'theme-option-small', label: '🎨 Theme: Light ☀️ / Dark 🌙 / Ocean 🌊', group: 'settings_sub' },
+            ],
+            dashboard: [
+                { id: 'viewDashboard', label: '📊 View Dashboard', group: 'top_bar' },
+                { id: 'goToMainApp', label: '🚀 Go to Main App', group: 'top_bar' },
+                { id: 'goToProcesses', label: '⚙️ Go to Processes', group: 'top_bar' },
+                { id: 'goToSummary', label: '📈 Go to Summary', group: 'top_bar' },
+                { id: 'goToHelp', label: '❓ Go to Help', group: 'top_bar' },
+                { id: 'goToControl', label: '🛡️ Go to Control Panel', group: 'top_bar' },
             ]
         };
 
@@ -1449,35 +1679,6 @@
             return Object.values(ALL_BUTTONS).flatMap(module => module.map(p => p.id));
         }
 
-        const DEFAULT_PERMISSIONS = {
-            admin: { permissions: getAllButtonIds() },
-            user: {
-                permissions: [
-                    'dbActionsBtn', 'columnOpsBtn', 'rowOpsBtn', 'showStatsBtn',
-                    'settingsExportJsonBtn', 'settingsExportExcelBtn', 'settingsImportExcel',
-                    'settingsAddPageBtn', 'settingsSleepBtn', 'settingsLogoutBtn',
-                    'theme-option-small',
-                    'dbCreateBtn', 'dbSwitchBtn2', 'dbSaveBtn', 'dbUserSaveBtn',
-                    'menuAddRowBtn', 'menuBulkShiftBtn', 'menuBulkDeleteBtn',
-                    'excelCleanBtn', 'excelDateBtn', 'excelTextBtn', 'excelWordBtn',
-                    'excelSeqBtn', 'excelDupBtn', 'excelSplitBtn',
-                    'excelMergeBtn', 'excelAdvMergeBtn', 'excelProximityBtn',
-                    'dbSwitchBtn', 'excelSummaryBtn', 'excelPivotBtn',
-                    'smartHelpBtn', 'contactInfo', 'ticketForm'
-                ]
-            },
-            visitor: {
-                permissions: [
-                    'dbActionsBtn', 'showStatsBtn',
-                    'dbSwitchBtn',
-                    'smartHelpBtn'
-                ]
-            }
-        };
-
-        // ============================================================
-        // HELPER FUNCTIONS
-        // ============================================================
         function escapeHtml(str) {
             if (!str) return '';
             return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
@@ -1538,36 +1739,12 @@
             if (!role) return false;
             if (rolePermissions[role]) return true;
             rolePermissions[role] = {
-                permissions: ['dbActionsBtn', 'showStatsBtn', 'smartHelpBtn']
+                permissions: getAllButtonIds()
             };
-            console.log(`✅ Auto-created role "${role}" in permissions`);
+            console.log(`✅ Auto-created role "${role}" in permissions with all buttons`);
             return true;
         }
 
-        function syncRolesFromUsers() {
-            let addedCount = 0;
-            for (let key in users) {
-                const user = users[key];
-                const role = user.author || 'visitor';
-                if (!rolePermissions[role]) {
-                    rolePermissions[role] = {
-                        permissions: ['dbActionsBtn', 'showStatsBtn', 'smartHelpBtn']
-                    };
-                    addedCount++;
-                    console.log(`🔧 Synced role "${role}" from user "${user.username}"`);
-                }
-            }
-            if (addedCount > 0) {
-                document.getElementById('syncStatusBadge').className = 'sync-status unsynced';
-                document.getElementById('syncStatusBadge').innerHTML = '⚠️ Unsaved Changes';
-                showToast(`Auto-created ${addedCount} role(s) from users`, 'info');
-            }
-            return addedCount;
-        }
-
-        // ============================================================
-        // FIREBASE INIT
-        // ============================================================
         function initFirebase() {
             try {
                 firebase.initializeApp(FIREBASE_CONFIG);
@@ -1581,9 +1758,6 @@
             }
         }
 
-        // ============================================================
-        // DATA LOADING
-        // ============================================================
         async function loadAllData() {
             if (!firebaseDB) return;
             try {
@@ -1599,18 +1773,46 @@
                     document.getElementById('syncStatusBadge').className = 'sync-status synced';
                     document.getElementById('syncStatusBadge').innerHTML = '✅ Synced';
                 } else {
-                    rolePermissions = JSON.parse(JSON.stringify(DEFAULT_PERMISSIONS));
-                    await firebaseDB.ref('rolePermissions').set(rolePermissions);
+                    rolePermissions = {};
                     document.getElementById('syncStatusBadge').className = 'sync-status synced';
                     document.getElementById('syncStatusBadge').innerHTML = '✅ Synced';
-                    showToast('Created default permissions in Firebase', 'success');
                 }
 
-                syncRolesFromUsers();
+                // ✅ Create permissions for each role found in users
+                let rolesAdded = 0;
+                for (let key in users) {
+                    const role = users[key].author || 'visitor';
+                    if (!rolePermissions[role]) {
+                        rolePermissions[role] = { permissions: getAllButtonIds() };
+                        rolesAdded++;
+                        console.log(`🔧 Created permissions for role: "${role}" from user: ${users[key].username}`);
+                    }
+                }
+                if (rolesAdded > 0) {
+                    console.log(`✅ Added ${rolesAdded} new roles from users`);
+                }
+
+                // ✅ If no roles exist at all, create a basic visitor role
+                if (Object.keys(rolePermissions).length === 0) {
+                    rolePermissions = {
+                        visitor: { permissions: ['dbActionsBtn', 'showStatsBtn', 'viewDashboard'] }
+                    };
+                    await firebaseDB.ref('rolePermissions').set(rolePermissions);
+                    console.log('✅ Created default visitor role (no users found)');
+                }
+
+                // ✅ Save permissions to Firebase if changed
+                const permsSnapCheck = await firebaseDB.ref('rolePermissions').once('value');
+                const currentPerms = permsSnapCheck.val() || {};
+                if (JSON.stringify(currentPerms) !== JSON.stringify(rolePermissions)) {
+                    await firebaseDB.ref('rolePermissions').set(rolePermissions);
+                    console.log('✅ Saved updated permissions to Firebase');
+                }
 
                 const dbSnap = await firebaseDB.ref('Project_1').once('value');
                 savedDatabases = dbSnap.val() || {};
 
+                await loadUserSession();
                 updateUI();
                 showToast("Data loaded successfully", "success");
             } catch (e) {
@@ -1619,15 +1821,49 @@
             }
         }
 
-        // ============================================================
-        // UI UPDATE
-        // ============================================================
+        async function loadUserSession() {
+            const savedUser = localStorage.getItem('currentUser');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (savedUser && isLoggedIn) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    const snap = await firebaseDB.ref('users-generatedcode/' + currentUser.id).once('value');
+                    if (snap.exists()) {
+                        document.getElementById('userNameDisplay').textContent = currentUser.username || 'Admin';
+                        document.getElementById('userRoleDisplay').textContent = `Role: ${currentUser.author || 'admin'}`;
+                        const avatar = document.getElementById('userAvatar');
+                        if (currentUser.profileImage) {
+                            avatar.innerHTML = `<img src="${currentUser.profileImage}" alt="${currentUser.username}">`;
+                        } else {
+                            avatar.innerHTML = `<i class="fas fa-user"></i>`;
+                        }
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('Error loading user session:', e);
+                }
+            }
+            document.getElementById('userNameDisplay').textContent = 'Admin';
+            document.getElementById('userRoleDisplay').textContent = 'Role: admin';
+            return false;
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            localStorage.setItem('isLoggedIn', 'false');
+            sessionStorage.setItem('wasLoggedIn', 'false');
+            window.location.href = 'index.html';
+        }
+
         function updateUI() {
             updateStats();
             renderUsers();
             renderRoles();
             renderPermissions();
             renderDatabases();
+            renderDashboardApps();
             populateRoleDropdowns();
             updateConnectionStatus();
         }
@@ -1673,14 +1909,12 @@
             const roles = Object.keys(rolePermissions);
 
             if (roles.length === 0) {
-                container.innerHTML = '<div class="text-gray-400 text-xs">No roles defined. Create a user or add a role.</div>';
+                container.innerHTML = '<div class="text-gray-400 text-xs">No roles defined.</div>';
                 return;
             }
 
             roles.forEach(role => {
-                const isAdmin = role === 'admin';
-                const roleNames = { admin: 'Admin', user: 'User', visitor: 'Visitor' };
-                const displayName = roleNames[role] || role;
+                const displayName = role.charAt(0).toUpperCase() + role.slice(1);
                 const activeStyle = selectedRole === role ?
                     'background: rgba(139,92,246,0.15); border-color: #8b5cf6; box-shadow: 0 0 10px rgba(139,92,246,0.1);' :
                     '';
@@ -1689,7 +1923,7 @@
 
                 let usedBy = [];
                 for (let key in users) {
-                    if (users[key].author === role) {
+                    if ((users[key].author || 'visitor') === role) {
                         usedBy.push(users[key].username);
                     }
                 }
@@ -1697,11 +1931,11 @@
 
                 html +=
                     `<span class="role-tag cursor-pointer text-xs" style="${activeStyle}" onclick="selectRole('${role}')">
-                        <i class="fas ${isAdmin ? 'fa-crown text-amber-500' : 'fa-user-tag'} mr-1"></i> 
-                        ${displayName} 
+                        <i class="fas fa-user-tag mr-1"></i> 
+                        ${displayName}
                         <span class="text-[10px] text-gray-400">(${permCount})</span>
                         ${usedByText ? `<span class="text-[10px] text-gray-400 ml-1">${usedByText}</span>` : ''}
-                        ${!isAdmin ? `<span class="remove-role ml-1" onclick="event.stopPropagation();deleteRole('${role}')"><i class="fas fa-times"></i></span>` : ''}
+                        <span class="remove-role ml-1" onclick="event.stopPropagation();deleteRole('${role}')"><i class="fas fa-times"></i></span>
                     </span>`;
             });
             container.innerHTML = html;
@@ -1848,35 +2082,61 @@
             container.innerHTML = html;
         }
 
+        function renderDashboardApps() {
+            const container = document.getElementById('appsContainer');
+            if (!container) return;
+            container.innerHTML = APPS.map(app => `
+                <a href="${app.path}" class="dashboard-app-card">
+                    <span class="app-icon ${app.color}"><i class="fas ${app.icon}"></i></span>
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-desc">${app.desc}</div>
+                    <span class="app-badge">${app.badge}</span>
+                </a>
+            `).join('');
+        }
+
         function populateRoleDropdowns() {
             const selects = ['newUserRole', 'editUserRole'];
-            const roles = Object.keys(rolePermissions);
 
+            let roles = [];
             for (let key in users) {
-                const role = users[key].author;
-                if (role && !roles.includes(role)) {
+                const role = users[key].author || 'visitor';
+                if (!roles.includes(role)) {
                     roles.push(role);
-                    ensureRoleExists(role);
                 }
             }
+
+            // Also include roles that exist in rolePermissions but not in users
+            for (let role in rolePermissions) {
+                if (!roles.includes(role)) {
+                    roles.push(role);
+                }
+            }
+
+            if (roles.length === 0) {
+                roles = ['visitor'];
+            }
+
+            roles.forEach(role => {
+                if (!rolePermissions[role]) {
+                    rolePermissions[role] = { permissions: getAllButtonIds() };
+                    console.log(`🔧 Created permissions for role: "${role}"`);
+                }
+            });
 
             selects.forEach(id => {
                 const select = document.getElementById(id);
                 if (!select) return;
                 const currentValue = select.value;
                 select.innerHTML = '';
-                const roleNames = { admin: 'Admin', user: 'User', visitor: 'Visitor' };
-                const sortedRoles = roles.sort((a, b) => {
-                    const order = { admin: 0, user: 1, visitor: 2 };
-                    return (order[a] !== undefined ? order[a] : 99) - (order[b] !== undefined ? order[b] : 99);
-                });
-                sortedRoles.forEach(role => {
-                    const label = roleNames[role] || role.charAt(0).toUpperCase() + role.slice(1);
+
+                roles.sort().forEach(role => {
                     const option = document.createElement('option');
                     option.value = role;
-                    option.textContent = label;
+                    option.textContent = role.charAt(0).toUpperCase() + role.slice(1);
                     select.appendChild(option);
                 });
+
                 if (currentValue && roles.includes(currentValue)) {
                     select.value = currentValue;
                 } else if (roles.length > 0) {
@@ -1898,9 +2158,6 @@
             }
         }
 
-        // ============================================================
-        // QUICK ADD ROLE
-        // ============================================================
         function showQuickAddRole() {
             document.getElementById('quickAddRoleContainer').classList.remove('hidden');
             document.getElementById('quickRoleName').focus();
@@ -1933,9 +2190,6 @@
             }
         }
 
-        // ============================================================
-        // ROLE MANAGEMENT
-        // ============================================================
         function selectRole(role) {
             selectedRole = role;
             renderRoles();
@@ -1966,11 +2220,9 @@
         }
 
         function deleteRole(role) {
-            if (role === 'admin') { showToast('Cannot delete admin role', 'error'); return; }
-
             let usersWithRole = [];
             for (let key in users) {
-                if (users[key].author === role) {
+                if ((users[key].author || 'visitor') === role) {
                     usersWithRole.push(users[key].username);
                 }
             }
@@ -1982,7 +2234,7 @@
 
             if (confirm(`Delete role "${role}"?`)) {
                 delete rolePermissions[role];
-                if (selectedRole === role) selectedRole = 'admin';
+                if (selectedRole === role) selectedRole = 'visitor';
                 document.getElementById('syncStatusBadge').className = 'sync-status unsynced';
                 document.getElementById('syncStatusBadge').innerHTML = '⚠️ Unsaved Changes';
                 populateRoleDropdowns();
@@ -1993,11 +2245,7 @@
             }
         }
 
-        // ============================================================
-        // USER MANAGEMENT
-        // ============================================================
         function showAddUserModal() {
-            syncRolesFromUsers();
             document.getElementById('addUserModal').classList.remove('hidden');
             document.getElementById('newUserUsername').value = '';
             document.getElementById('newUserEmail').value = '';
@@ -2066,8 +2314,6 @@
         function editUser(userId) {
             const user = users[userId];
             if (!user) return;
-
-            syncRolesFromUsers();
 
             document.getElementById('editUserId').value = userId;
             document.getElementById('editUserUsername').value = user.username || '';
@@ -2156,9 +2402,6 @@
             }
         }
 
-        // ============================================================
-        // PERMISSIONS SAVE
-        // ============================================================
         async function savePermissionsToFirebase() {
             try {
                 await firebaseDB.ref('rolePermissions').set(rolePermissions);
@@ -2175,9 +2418,6 @@
 
         function savePermissions() { savePermissionsToFirebase(); }
 
-        // ============================================================
-        // CLEAR CACHE
-        // ============================================================
         function clearPageCache(pageName) {
             if (!confirm(`Clear cache and open ${pageName} in a new tab?`)) return;
 
@@ -2207,9 +2447,6 @@
             window.open(url.toString(), '_blank');
         }
 
-        // ============================================================
-        // DATABASE MANAGEMENT
-        // ============================================================
         async function deleteDatabase(dbName) {
             if (!confirm(`Delete database "${dbName}" permanently?`)) return;
             try {
@@ -2223,9 +2460,6 @@
             }
         }
 
-        // ============================================================
-        // TAB SYSTEM
-        // ============================================================
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.onclick = function () {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -2237,9 +2471,6 @@
             };
         });
 
-        // ============================================================
-        // MODULE SELECTOR
-        // ============================================================
         document.querySelectorAll('.module-btn').forEach(btn => {
             btn.onclick = function () {
                 document.querySelectorAll('.module-btn').forEach(b => b.classList.remove('active'));
@@ -2249,30 +2480,26 @@
             };
         });
 
-        // ============================================================
-        // MODAL CLOSE ON OVERLAY CLICK
-        // ============================================================
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             modal.addEventListener('click', function (e) {
                 if (e.target === this) closeModal(this.id);
             });
         });
 
-        // ============================================================
-        // THEME SUPPORT
-        // ============================================================
         function setTheme(theme) {
             document.body.className = `theme-${theme}`;
             localStorage.setItem('selectedTheme', theme);
         }
 
-        // ============================================================
-        // INIT
-        // ============================================================
         async function init() {
-            // Load theme
             const savedTheme = localStorage.getItem('selectedTheme') || 'light';
             setTheme(savedTheme);
+
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                window.location.href = 'index.html';
+                return;
+            }
 
             if (initFirebase()) {
                 await loadAllData();
@@ -2281,7 +2508,6 @@
         }
         init();
 
-        // Expose functions
         window.showAddUserModal = showAddUserModal;
         window.addUser = addUser;
         window.editUser = editUser;
@@ -2302,8 +2528,10 @@
         window.quickAddRole = quickAddRole;
         window.selectAllPermissions = selectAllPermissions;
         window.deselectAllPermissions = deselectAllPermissions;
+        window.handleLogout = handleLogout;
 
         console.log('✅ Admin Control Panel loaded');
+        console.log('✅ Dynamic roles supported - roles come from users');
     </script>
 </body>
 

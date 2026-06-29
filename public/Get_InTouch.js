@@ -8,13 +8,14 @@ import {
 
 // ============= FIREBASE CONFIGURATION =============
 const firebaseConfig = {
-  apiKey: "AIzaSyBm5-7ZN7frav9FvJFf9tgkE-mg8nex6t0",
-      authDomain: "publish-ae85.firebaseapp.com",
-      projectId: "publish-ae85",
-      storageBucket: "publish-ae85.firebasestorage.app",
-      messagingSenderId: "515415500647",
-      appId: "1:515415500647:web:5d4335363aaf948a5e71c2",
-      measurementId: "G-HM8M3DGXJD"
+  apiKey: "AIzaSyBrwioR6w9GHIxVnHWriyYB4BaJbXZ8xlU",
+  authDomain: "codeae-85.firebaseapp.com",
+  databaseURL: "https://codeae-85-default-rtdb.firebaseio.com",
+  projectId: "codeae-85",
+  storageBucket: "codeae-85.firebasestorage.app",
+  messagingSenderId: "855701949624",
+  appId: "1:855701949624:web:2cf2ea8802a2d372f3384d",
+  measurementId: "G-LL3X996JHP"
 };
 
 // Initialize Firebase
@@ -54,7 +55,7 @@ if (typeof emailjs !== "undefined") {
 // ============= FETCH DATA FROM FIREBASE =============
 async function fetchAllData() {
   console.log("🔄 Fetching data from Firebase...");
-  
+
   try {
     const ticketsRef = ref(database, 'tickets');
     const snapshot = await get(ticketsRef);
@@ -63,10 +64,10 @@ async function fetchAllData() {
     if (snapshot.exists()) {
       const ticketsData = snapshot.val();
       console.log("📁 Raw Firebase data:", ticketsData);
-      
+
       for (const [ticketType, tickets] of Object.entries(ticketsData)) {
         console.log(`Processing type: ${ticketType}`, tickets);
-        
+
         if (tickets && typeof tickets === 'object') {
           for (const [ticketId, ticketData] of Object.entries(tickets)) {
             if (ticketData && typeof ticketData === 'object') {
@@ -88,18 +89,18 @@ async function fetchAllData() {
     } else {
       console.log("No data found in 'tickets' path");
     }
-    
+
     console.log(`📊 Total records fetched: ${records.length}`);
-    
+
     records.sort((a, b) => {
       if (!a.timestamp) return 1;
       if (!b.timestamp) return -1;
       return b.timestamp.localeCompare(a.timestamp);
     });
-    
+
     allRecords = records;
     return records;
-    
+
   } catch (error) {
     console.error("❌ Error fetching data:", error);
     showToast("Error loading data: " + error.message, "error");
@@ -152,7 +153,7 @@ function displayTable(records) {
 
   tableBody.innerHTML = filtered.map((record) => {
     let badgeColor = '#2196F3';
-    
+
     if (record.type === 'اضافة بيانات') {
       badgeColor = '#4CAF50';
     } else if (record.type === 'عطل تقني') {
@@ -160,7 +161,7 @@ function displayTable(records) {
     } else if (record.type === 'تعديل بيانات') {
       badgeColor = '#FF9800';
     }
-    
+
     return `
       <tr data-path="${record.fullPath}" data-id="${record.id}" onclick="selectRow(this)" style="cursor: pointer;">
         <td style="padding: 12px 8px;">
@@ -208,7 +209,7 @@ window.selectRow = (row) => {
     if (meterIdInput) meterIdInput.value = record.meter_id || "";
     if (userNameInput) userNameInput.value = record.name || "";
     if (fullEmailInput) fullEmailInput.value = record.email || "";
-    
+
     if (messageInput) {
       messageInput.value = `Replying to your request: "${record.message || ''}"\n\n--- Your Response: ---\n`;
     }
@@ -241,10 +242,10 @@ async function deleteTicketFromDatabase(pathToDelete) {
 // ============= HANDLE SUBMISSION =============
 async function handleSubmission() {
   const selectedRow = document.querySelector("#tableBody tr.selected");
-  const toEmail = fullEmailInput && fullEmailInput.value ? 
-    fullEmailInput.value : 
+  const toEmail = fullEmailInput && fullEmailInput.value ?
+    fullEmailInput.value :
     (emailUsername && emailDomain ? emailUsername.value + emailDomain.value : "");
-    
+
   const msgContent = messageInput ? messageInput.value : "";
   const currentTime = new Date().toLocaleString("en-US", {
     dateStyle: "full",
@@ -321,12 +322,12 @@ Time: ${currentTime}
 
     if (response.status === 200) {
       console.log("✅ Email sent successfully!");
-      
+
       // Step 2: If this was a ticket reply, delete from database IMMEDIATELY
       if (isProcessA && pathToDelete) {
         console.log("🗑️ Deleting ticket from database...");
         const deleted = await deleteTicketFromDatabase(pathToDelete);
-        
+
         if (!deleted) {
           showToast("⚠️ Email sent but database deletion failed", "error");
           return false;
@@ -354,14 +355,14 @@ Time: ${currentTime}
           : "✓ Email sent successfully!";
         setTimeout(() => (successMessage.style.display = "none"), 5000);
       }
-      
+
       if (!isProcessA) {
         showToast("✅ Email sent successfully!", "success");
         // Clear form for normal emails
         if (form) form.reset();
         if (emailDomain) emailDomain.value = "";
       }
-      
+
       return true;
     }
   } catch (error) {
@@ -374,11 +375,11 @@ Time: ${currentTime}
 // ============= REFRESH DATA =============
 async function refreshData() {
   console.log("🔄 Refreshing data...");
-  
+
   try {
     const data = await fetchAllData();
     displayTable(data);
-    
+
     if (data.length === 0) {
       showToast("⚠️ No tickets found in database", "warning");
     } else {
@@ -386,7 +387,7 @@ async function refreshData() {
   } catch (error) {
     console.error("Refresh error:", error);
     showToast("❌ Error loading tickets", "error");
-    
+
     if (tableBody) {
       tableBody.innerHTML = `
         <tr>
@@ -405,7 +406,7 @@ function showToast(msg, type = "info") {
     console.log("Toast:", msg, type);
     return;
   }
-  
+
   toastNotification.textContent = msg;
   toastNotification.className = `toast-notification show ${type}`;
   setTimeout(() => toastNotification.classList.remove("show"), 3000);
@@ -415,20 +416,20 @@ function showToast(msg, type = "info") {
 if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
+
     const email = fullEmailInput?.value || (emailUsername?.value + emailDomain?.value);
     if (!email || !messageInput?.value) {
       showToast("❌ Please fill in email and message", "error");
       return;
     }
-    
+
     if (submitBtn) {
       submitBtn.disabled = true;
       const originalText = submitBtn.textContent;
       submitBtn.textContent = "Sending...";
-      
+
       await handleSubmission();
-      
+
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
     }

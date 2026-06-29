@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Get_InTouch.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Get in Touch | Support Center</title>
+  </head>
+  <body>
+    <div class="main-layout">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h3>📋 Database Records</h3>
+        </div>
+
+        <div class="table-filters">
+          <input
+            type="text"
+            id="tableFilter"
+            placeholder="🔍 Filter by Meter ID, Name or Email..."
+            class="filter-input-small"
+          />
+        </div>
+
+        <div class="table-container" id="tableContainer">
+          <table class="data-table" id="dataTable">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Meter ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Time</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="6" class="loading-cell">
+                  Loading data from Firebase... 🚀
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="container">
+
+          <div class="notification-banner">Get in Touch 📧 Technical Servic and E-mail</div>
+
+          <div class="contact-container">
+            <div class="contact-form">
+              <form id="contactForm">
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <div class="email-input-group">
+                    <input
+                      type="text"
+                      id="emailUsername"
+                      placeholder="yourname"
+                      autocomplete="off"
+                    />
+                    <span class="email-at">@</span>
+                    <select id="emailDomain" class="email-domain-select">
+                      <option value="">Select domain</option>
+                      <option value="@gmail.com">gmail.com</option>
+                      <option value="@yahoo.com">yahoo.com</option>
+                      <option value="@outlook.com">outlook.com</option>
+                      <option value="@hotmail.com">hotmail.com</option>
+                      <option value="@live.com">live.com</option>
+                      <option value="@aol.com">aol.com</option>
+                      <option value="@icloud.com">icloud.com</option>
+                      <option value="@mail.com">mail.com</option>
+                      <option value="@protonmail.com">protonmail.com</option>
+                      <option value="@yandex.com">yandex.com</option>
+                    </select>
+                  </div>
+                  <div class="hint">Enter your email and select domain</div>
+                  <div class="error" id="emailError">
+                    Please enter a valid email address
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="recordType">Record Type</label>
+                  <select id="recordType" class="record-type-select">
+                    <option value="">Select Type</option>
+                    <option value="تعديل بيانات">✏️ تعديل بيانات</option>
+                    <option value="اضافة بيانات">📝 اضافة بيانات</option>
+                    <option value="عطل تقني">🔧 عطل تقني</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="meterId">Meter ID</label>
+                  <input
+                    type="text"
+                    id="meterId"
+                    placeholder="Enter Meter ID"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="userName">Name</label>
+                  <input
+                    type="text"
+                    id="userName"
+                    placeholder="Enter your name"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="fullEmail">Full Email Address</label>
+                  <input
+                    type="email"
+                    id="fullEmail"
+                    placeholder="Enter full email address"
+                    autocomplete="off"
+                  />
+                  <div class="hint">Or click on a record to auto-fill</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="message">Your Message</label>
+                  <textarea
+                    id="message"
+                    placeholder="Enter your message here..."
+                    rows="4"
+                  ></textarea>
+                  <div class="error" id="messageError">
+                    Please enter your message
+                  </div>
+                </div>
+
+                <button type="submit" id="submitBtn">Send Message</button>
+                <div class="success-message" id="successMessage">
+                  ✓ Message sent successfully! Record removed.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toastNotification" class="toast-notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="module" src="Get_InTouch.js"></script>
+  </body>
+</html>
