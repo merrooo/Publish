@@ -1176,6 +1176,8 @@
             color: #7dd3fc;
         }
     </style>
+    <base target="_blank">
+    <base target="_blank">
 </head>
 
 <body class="theme-light">
@@ -1228,7 +1230,6 @@
                 <button class="tab-btn" data-tab="permissions"><i class="fas fa-eye-slash mr-1"></i> Visibility</button>
                 <button class="tab-btn" data-tab="databases"><i class="fas fa-database mr-1"></i> Databases</button>
                 <button class="tab-btn" data-tab="cache"><i class="fas fa-broom mr-1"></i> Cache</button>
-                <button class="tab-btn" data-tab="dashboard"><i class="fas fa-th-large mr-1"></i> Dashboard</button>
             </div>
 
             <div class="flex-1 overflow-hidden">
@@ -1382,37 +1383,6 @@
                             page.
                             Theme and login session are preserved.
                         </p>
-                    </div>
-                </div>
-
-                <div id="tab-dashboard" class="tab-content hidden">
-                    <div class="mb-3 border-b border-white/15 pb-2">
-                        <h2 class="section-title mb-0 text-sm"><i class="fas fa-th-large text-purple-400 mr-2"></i>
-                            Applications</h2>
-                        <p class="text-gray-500 text-xs mt-0.5">Quick access to all modules</p>
-                    </div>
-                    <div id="dashboardContent" class="flex-1 overflow-y-auto">
-                        <div class="dashboard-apps" id="appsContainer"></div>
-                        <div class="mt-4 p-4 bg-white/10 rounded-xl border border-white/15">
-                            <h3 class="text-gray-700 font-bold text-xs uppercase tracking-wider mb-3">Quick Links</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <a href="index.html" class="btn-glass text-xs">
-                                    <i class="fas fa-home mr-1"></i> Dashboard
-                                </a>
-                                <a href="Help.html" class="btn-glass text-xs">
-                                    <i class="fas fa-question-circle mr-1"></i> Help
-                                </a>
-                                <a href="Main_App.html" class="btn-glass text-xs">
-                                    <i class="fas fa-database mr-1"></i> Main App
-                                </a>
-                                <a href="Processes.html" class="btn-glass text-xs">
-                                    <i class="fas fa-cogs mr-1"></i> Processes
-                                </a>
-                                <a href="Summary.html" class="btn-glass text-xs">
-                                    <i class="fas fa-chart-bar mr-1"></i> Summary
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1667,11 +1637,15 @@
             ],
             dashboard: [
                 { id: 'viewDashboard', label: '📊 View Dashboard', group: 'top_bar' },
+                { id: 'viewUserInfo', label: '👤 View User Info (Avatar, Name, Role)', group: 'top_bar' },
                 { id: 'goToMainApp', label: '🚀 Go to Main App', group: 'top_bar' },
                 { id: 'goToProcesses', label: '⚙️ Go to Processes', group: 'top_bar' },
                 { id: 'goToSummary', label: '📈 Go to Summary', group: 'top_bar' },
                 { id: 'goToHelp', label: '❓ Go to Help', group: 'top_bar' },
                 { id: 'goToControl', label: '🛡️ Go to Control Panel', group: 'top_bar' },
+                { id: 'refreshPermissions', label: '🔄 Refresh Permissions Button', group: 'top_bar' },
+                { id: 'theme-option-small', label: '🎨 Theme Buttons (Light/Dark/Ocean)', group: 'top_bar' },
+                { id: 'logout', label: '🚪 Logout Button', group: 'top_bar' },
             ]
         };
 
